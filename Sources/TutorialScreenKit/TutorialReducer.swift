@@ -18,6 +18,10 @@ public struct TutorialReducer {
 
         var selection: Int = 0
         var tutorials: [TutorialData]
+        
+        public init(tutorials: [TutorialData]) {
+            self.tutorials = tutorials
+        }
 
         var isSkipButtonEnabled: Bool {
             selection < tutorials.count - 1
