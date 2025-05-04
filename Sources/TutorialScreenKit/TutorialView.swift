@@ -12,6 +12,16 @@ public struct TutorialViewConfiguration {
     var backgroundColor: Color
     var tintColor: Color
     var textProvider: (LocalizedStringKey) -> Text
+    
+    public init(
+        backgroundColor: Color = .white,
+        tintColor: Color = .blue,
+        textProvider: @escaping (LocalizedStringKey) -> Text = { Text($0) }
+    ) {
+        self.backgroundColor = backgroundColor
+        self.tintColor = tintColor
+        self.textProvider = textProvider
+    }
 }
 
 public struct TutorialView: View {
