@@ -11,6 +11,8 @@ import ComposableArchitecture
 
 @Reducer
 public struct TutorialReducer {
+    public init() {}
+    
     @ObservableState
     public struct State: Equatable {
         // Can be used to show tutorial only once.
