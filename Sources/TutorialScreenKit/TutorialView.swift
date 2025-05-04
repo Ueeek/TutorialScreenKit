@@ -152,7 +152,7 @@ private struct TutorialStepView: View {
             item
                 .image
                 .resizable()
-                .aspectRatio(1.0, contentMode: .fit)
+                .aspectRatio(contentMode: .fit)
                 .frame(height: 100)
                 .foregroundStyle(tintColor)
             Spacer()
