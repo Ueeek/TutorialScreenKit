@@ -15,6 +15,11 @@ public struct TutorialViewConfiguration {
 }
 
 public struct TutorialView: View {
+    public init(store: StoreOf<TutorialReducer>, configuration: TutorialViewConfiguration) {
+        self.store = store
+        self.configuration = configuration
+    }
+    
     var store: StoreOf<TutorialReducer>
     var configuration: TutorialViewConfiguration
     
