@@ -1,19 +1,16 @@
 import Testing
-@testable import TutorialScreenKit
-
-import Foundation
-import Testing
-import UIKit
 import ComposableArchitecture
-@testable import CleanAI
+@testable import TutorialScreenKit
+import Foundation
 
 @Suite("TutorialReducer Test")
 class TutorialReducerTests {
     let uuid: UUIDGenerator = .constant(UUID(uuidString: "12345678-1234-1234-1234-123456789012")!)
     let tutorials: Int = TutorialData.getTutorials(uuid: .constant(UUID(00000000-0000-0000-0000-000000000000))).count
     
+    @MainActor
     @Test func testTapNextButton() async {
-        let store = await TestStore(initialState: TutorialReducer.State(tutorials: TutorialData.getTutorials(uuid: uuid))) {
+        let store = TestStore(initialState: TutorialReducer.State(tutorials: TutorialData.getTutorials(uuid: uuid))) {
             TutorialReducer()
         }
         
@@ -27,10 +24,11 @@ class TutorialReducerTests {
         await store.send(.nextButtonTapped)
     }
     
+    @MainActor
     @Test func testTapBackButton() async {
         let tutorials: Int = TutorialData.getTutorials(uuid: uuid).count
         
-        let store = await TestStore(initialState: TutorialReducer.State(selection: tutorials - 1, tutorials: TutorialData.getTutorials(uuid: uuid))) {
+        let store = TestStore(initialState: TutorialReducer.State(tutorials: TutorialData.getTutorials(uuid: uuid), selection: tutorials - 1)) {
             TutorialReducer()
         }
         
@@ -44,12 +42,13 @@ class TutorialReducerTests {
         await store.send(.backButtonTapped)
     }
     
+    @MainActor
     @Test func buttonEnable() async {
         let tutorials = TutorialData.getTutorials(uuid: uuid).count
         
         // NextButton
         for i in 0..<tutorials {
-            let state = TutorialReducer.State(selection: i, tutorials: TutorialData.getTutorials(uuid: uuid))
+            let state = TutorialReducer.State(tutorials: TutorialData.getTutorials(uuid: uuid), selection: i)
             if i == tutorials - 1 {
                 #expect(state.isNextButtonEnabled == false)
             } else {
@@ -59,7 +58,7 @@ class TutorialReducerTests {
         
         // BackButton
         for i in 0..<tutorials {
-            let state = TutorialReducer.State(selection: i, tutorials: TutorialData.getTutorials(uuid: uuid))
+            let state = TutorialReducer.State(tutorials: TutorialData.getTutorials(uuid: uuid), selection: i)
             if i == 0 {
                 #expect(state.isBackButtonEnabled == false)
             } else {
@@ -69,7 +68,7 @@ class TutorialReducerTests {
         
         // SkipButton
         for i in 0..<tutorials {
-            let state = TutorialReducer.State(selection: i, tutorials: TutorialData.getTutorials(uuid: uuid))
+            let state = TutorialReducer.State(tutorials: TutorialData.getTutorials(uuid: uuid), selection: i)
             if i == tutorials - 1 {
                 #expect(state.isSkipButtonEnabled == false)
             } else {
@@ -78,9 +77,10 @@ class TutorialReducerTests {
         }
     }
     
+    @MainActor
     @Test func testTapSkipButton() async {
         let isDismissInvoked: LockIsolated<[Bool]> = .init([])
-        let store = await TestStore(initialState: TutorialReducer.State(selection: tutorials - 1, tutorials: TutorialData.getTutorials(uuid: uuid))) {
+        let store = TestStore(initialState: TutorialReducer.State(tutorials: TutorialData.getTutorials(uuid: uuid), selection: tutorials - 1)) {
             TutorialReducer()
         } withDependencies: {
             $0.dismiss = DismissEffect {

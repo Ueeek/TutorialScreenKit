@@ -18,11 +18,12 @@ public struct TutorialReducer {
         // Can be used to show tutorial only once.
         @Shared(.appStorage("hasShownTutorial")) var hasShownTutorial: Bool = false
 
-        var selection: Int = 0
+        var selection: Int
         var tutorials: [TutorialData]
         
-        public init(tutorials: [TutorialData]) {
+        public init(tutorials: [TutorialData], selection: Int = 0) {
             self.tutorials = tutorials
+            self.selection = selection
         }
 
         var isSkipButtonEnabled: Bool {
